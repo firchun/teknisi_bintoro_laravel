@@ -1,28 +1,20 @@
 @push('js')
     <script>
         $(function() {
-            $('#datatable-users').DataTable({
+            $('#datatable-customers').DataTable({
                 processing: true,
                 serverSide: false,
                 responsive: false,
-                ajax: '{{ url('users-datatable', $users) }}',
+                ajax: '{{ url('service-datatable') }}',
                 columns: [{
                         data: 'id',
                         name: 'id'
                     },
-                    {
-                        data: 'avatar',
-                        name: 'avatar'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
 
+                    {
+                        data: 'alamat',
+                        name: 'alamat'
+                    },
 
                     {
                         data: 'action',
@@ -30,31 +22,33 @@
                     }
                 ]
             });
-            $('.create-new').click(function() {
-                $('#create').modal('show');
+
+            $('.refresh').click(function() {
+                $('#datatable-customers').DataTable().ajax.reload();
             });
-            window.editUser = function(id) {
+            window.editCustomer = function(id) {
                 $.ajax({
                     type: 'GET',
-                    url: '/users/edit/' + id,
+                    url: '/customers/edit/' + id,
                     success: function(response) {
-                        $('#UsersModalLabel').text('Edit User');
-                        $('#formUserId').val(response.id);
-                        $('#formUserName').val(response.name);
-                        $('#formUserEmail').val(response.email);
-                        $('#UsersModal').modal('show');
+                        $('#customersModalLabel').text('Edit Customer');
+                        $('#formCustomerId').val(response.id);
+                        $('#formCustomerName').val(response.name);
+                        $('#formCustomerPhone').val(response.phone);
+                        $('#formCustomerAddress').val(response.address);
+                        $('#customersModal').modal('show');
                     },
                     error: function(xhr) {
                         alert('Terjadi kesalahan: ' + xhr.responseText);
                     }
                 });
             };
-            $('#saveUserBtn').click(function() {
+            $('#saveCustomerBtn').click(function() {
                 var formData = $('#userForm').serialize();
 
                 $.ajax({
                     type: 'POST',
-                    url: '/users/store',
+                    url: '/customers/store',
                     data: formData,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -62,29 +56,29 @@
                     success: function(response) {
                         alert(response.message);
                         // Refresh DataTable setelah menyimpan perubahan
-                        $('#datatable-users').DataTable().ajax.reload();
-                        $('#usersModal').modal('hide');
+                        $('#datatable-customers').DataTable().ajax.reload();
+                        $('#customersModal').modal('hide');
                     },
                     error: function(xhr) {
                         alert('Terjadi kesalahan: ' + xhr.responseText);
                     }
                 });
             });
-            $('#createUserBtn').click(function() {
+            $('#createCustomerBtn').click(function() {
                 var formData = $('#createUserForm').serialize();
 
                 $.ajax({
                     type: 'POST',
-                    url: '/users/store',
+                    url: '/customers/store',
                     data: formData,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
                         alert(response.message);
-                        $('#userssModalLabel').text('Edit User');
-                        $('#formUserName').val('');
-                        $('#datatable-users').DataTable().ajax.reload();
+                        $('#customersModalLabel').text('Edit Customer');
+                        $('#formCustomerName').val('');
+                        $('#datatable-customers').DataTable().ajax.reload();
                         $('#create').modal('hide');
                     },
                     error: function(xhr) {
@@ -92,19 +86,17 @@
                     }
                 });
             });
-
-            window.deleteUser = function(id) {
-                if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+            window.deleteCustomers = function(id) {
+                if (confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')) {
                     $.ajax({
                         type: 'DELETE',
-                        url: '/users/delete/' + id,
+                        url: '/customers/delete/' + id,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
-                            alert(response.message);
-                            // Refresh DataTable setelah menghapus pengguna
-                            $('#datatable-users').DataTable().ajax.reload();
+                            // alert(response.message);
+                            $('#datatable-customers').DataTable().ajax.reload();
                         },
                         error: function(xhr) {
                             alert('Terjadi kesalahan: ' + xhr.responseText);
