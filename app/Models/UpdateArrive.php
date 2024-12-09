@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Service extends Model
+class UpdateArrive extends Model
 {
     use HasFactory;
-
-    protected $table = 'service';
+    protected $table = 'update_arrive';
     protected $guarded = [];
 
-    public function user(): BelongsTo
+    public function service(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(Service::class, 'id_service');
     }
 }

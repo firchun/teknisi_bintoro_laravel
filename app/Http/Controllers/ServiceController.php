@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class ServiceController extends Controller
@@ -17,13 +18,16 @@ class ServiceController extends Controller
     }
     public function getServiceDataTable()
     {
-        $service = Service::orderByDesc('id');
+        $service = Service::with(['user'])->orderByDesc('id');
 
         return DataTables::of($service)
+            ->addColumn('fotoView', function ($customer) {
+                return '<a target="__blank" href="' . Storage::url($customer->foto) . '"><img src="' . Storage::url($customer->foto) . '" style="width:100px; height:100px; object-fit:cover;" alt="foto"></a>';
+            })
             ->addColumn('action', function ($customer) {
                 return view('admin.service.components.actions', compact('customer'));
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'fotoView'])
             ->make(true);
     }
     public function store(Request $request)
@@ -68,5 +72,15 @@ class ServiceController extends Controller
         //     'message' => 'Service created successfully',
         //     'data' => $service,
         // ]);
+    }
+    public function edit($id)
+    {
+        $customer = Service::with(['user'])->find($id);
+
+        if (!$customer) {
+            return response()->json(['message' => 'service not found'], 404);
+        }
+
+        return response()->json($customer);
     }
 }

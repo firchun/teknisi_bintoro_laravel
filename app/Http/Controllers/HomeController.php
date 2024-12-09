@@ -32,7 +32,6 @@ class HomeController extends Controller
         $data = [
             'title' => 'Dashboard',
             'users' => User::count(),
-            'customers' => Customer::count()
         ];
         return view('admin.dashboard', $data);
     }
@@ -49,5 +48,12 @@ class HomeController extends Controller
             'title' => 'Pengajuan Service',
         ];
         return view('pages.pengajuan', $data);
+    }
+    public function riwayatService()
+    {
+        $data = [
+            'title' => 'Riwayat Service',
+        ];
+        return view('pages.riwayat', $data);
     }
 }

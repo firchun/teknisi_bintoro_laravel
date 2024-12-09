@@ -26,8 +26,10 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>ALamat</th>
-
+                                <th>Foto</th>
+                                <th>Customer</th>
+                                <th>Alamat</th>
+                                <th>Keterangan</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -35,8 +37,10 @@
                         <tfoot>
                             <tr>
                                 <th>ID</th>
-                                <th>ALamat</th>
-
+                                <th>Foto</th>
+                                <th>Customer</th>
+                                <th>Alamat</th>
+                                <th>Keterangan</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

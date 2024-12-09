@@ -4,7 +4,7 @@
         <a href="{{ route('home') }}" class="app-brand-link">
 
             <span class="app-brand-text demo menu-text fw-bolder ms-2"
-                style="text-transform: uppercase !important;">ADMIN</span>
+                style="text-transform: uppercase !important;">{{ Auth::user()->role }}</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -17,12 +17,21 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">{{ env('APP_NAME') ?? 'Laravel' }}</span>
+            <span class="menu-header-text">{{ env('APP_NAME') ?? 'Dashboard' }}</span>
         </li>
         <li class="menu-item {{ request()->is('home*') ? 'active' : '' }}">
             <a href="{{ url('/home') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
+            </a>
+        </li>
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Jadwal</span>
+        </li>
+        <li class="menu-item {{ request()->is('calendar*') ? 'active' : '' }}">
+            <a href="{{ url('/calendar') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                <div data-i18n="Analytics">Kalender</div>
             </a>
         </li>
         @if (Auth::user()->role == 'Admin')

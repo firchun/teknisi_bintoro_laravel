@@ -14,6 +14,8 @@
                             <li class="nav-item"><a class="nav-link" href="{{ url('/pengajuan-service') }}">Pengajuan
                                     Service</a>
                             </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/riwayat-service') }}">Riwayat</a>
+                            </li>
                         @endif
                     @endif
                 </ul>
