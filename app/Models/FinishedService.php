@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ToolService extends Model
+class FinishedService extends Model
 {
     use HasFactory;
-    protected $table = 'tool_service';
+    protected $table = 'finished_service';
     protected $guarded = [];
 
     public function service(): BelongsTo

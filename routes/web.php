@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\FinishedServiceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleServiceController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TrackingServiceController;
 use App\Http\Controllers\UserController;
+use App\Models\FinishedService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,8 +45,10 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     //service managemen
     Route::get('/service', [ServiceController::class, 'index'])->name('service');
     Route::post('/service/store', [ServiceController::class, 'store'])->name('service.store');
+    Route::post('/service/storeTool', [ServiceController::class, 'storeTool'])->name('service.storeTool');
     Route::get('/service/edit/{di}', [ServiceController::class, 'edit'])->name('service.edit');
     Route::get('/service-datatable', [ServiceController::class, 'getServiceDataTable']);
+    Route::get('/finished-service-datatable', [FinishedServiceController::class, 'getFinishedServiceDataTable']);
     //schedule managemen
     Route::get('/schedule', [ScheduleServiceController::class, 'index'])->name('schedule');
     Route::post('/schedule/store', [ScheduleServiceController::class, 'store'])->name('schedule.store');
@@ -52,6 +57,9 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/schedule/service/{id}', [ScheduleServiceController::class, 'scheduleService'])->name('schedule.service');
     Route::get('/schedule/check-arrive/{id}', [ScheduleServiceController::class, 'checkArrive'])->name('schedule.check-arrive');
     Route::get('/schedule-datatable', [ScheduleServiceController::class, 'getScheduleDataTable']);
+    //report managemen
+    Route::get('/report/finished', [ReportController::class, 'reportFinished'])->name('report.finished');
+    Route::get('/report/sparepart', [ReportController::class, 'reportSparepart'])->name('report.sparepart');
     //calendar managemen
     Route::get('/calendar', [ScheduleServiceController::class, 'calendar'])->name('calendar.index');
     Route::get('/calendar/events', [ScheduleServiceController::class, 'getEvents'])->name('calendar.events');

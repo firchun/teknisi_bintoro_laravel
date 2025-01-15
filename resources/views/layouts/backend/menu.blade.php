@@ -34,6 +34,23 @@
                 <div data-i18n="Analytics">Kalender</div>
             </a>
         </li>
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Laporan</span>
+        </li>
+        <li class="menu-item {{ request()->is('report/finished*') ? 'active' : '' }}">
+            <a href="{{ url('/report/finished') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-folder"></i>
+                <div data-i18n="Analytics">Service Selesai</div>
+            </a>
+        </li>
+        @if (Auth::user()->role == 'K_teknisi')
+            <li class="menu-item {{ request()->is('service*') ? 'active' : '' }}">
+                <a href="{{ url('/service') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-copy-alt"></i>
+                    <div data-i18n="Analytics">Pengajuan</div>
+                </a>
+            </li>
+        @endif
         @if (Auth::user()->role == 'Admin')
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text">Service</span>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FinishedService;
 use App\Models\Service;
+use App\Models\ToolService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -82,5 +84,48 @@ class ServiceController extends Controller
         }
 
         return response()->json($customer);
+    }
+    public function storeTool(Request $request)
+    {
+        // Validasi data dari form
+        $validatedData = $request->validate([
+            'id_service' => 'required',
+            'jenis_kerusakan' => 'required',
+            'keterangan' => 'required',
+            'waktu_penyelesaian' => 'required',
+            'alat' => 'required|array|min:1',
+            'alat.*' => 'required|string|max:255', // Validasi untuk setiap nama alat
+            'jumlah' => 'required|array|min:1',
+            'jumlah.*' => 'required|integer|min:1', // Validasi untuk jumlah
+            'jenis' => 'required|array|min:1',
+            'jenis.*' => 'required|string|in:Penggantian,Perbaikan', // Validasi jenis
+        ]);
+
+        // Simpan data ke database
+        try {
+            FinishedService::create([
+                'id_service' => $validatedData['id_service'],
+                'jenis_kerusakan' => $validatedData['jenis_kerusakan'],
+                'keterangan' => $validatedData['keterangan'],
+                'waktu_penyelesaian' => $validatedData['waktu_penyelesaian'],
+            ]);
+            foreach ($validatedData['alat'] as $index => $alat) {
+                ToolService::create([
+                    'id_service' => $validatedData['id_service'],
+                    'alat' =>  $alat,
+                    'jumlah' => $validatedData['jumlah'][$index],
+                    'jenis' => $validatedData['jenis'][$index],
+                ]);
+            }
+
+            return response()->json([
+                'message' => 'Data alat berhasil disimpan.',
+            ], 200);
+        } catch (\Exception $e) {
+            // Tangani error jika terjadi masalah saat menyimpan data
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
