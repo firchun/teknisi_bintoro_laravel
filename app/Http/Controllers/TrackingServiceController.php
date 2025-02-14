@@ -36,17 +36,25 @@ class TrackingServiceController extends Controller
     }
     public function getTrackingById($id)
     {
-        $tracking = TrackingService::with(['service.user', 'scheduleService.teknisi'])->where('id_service', $id)->get();
+        $tracking = TrackingService::with(['service.user', 'scheduleService.teknisi'])
+            ->where('id_service', $id)
+            ->get(); // Mengembalikan koleksi
 
-        if ($tracking) {
-            return response()->json([
-                'latitude' => $tracking->latitude,
-                'longitude' => $tracking->longitude,
-                'customer' => $tracking->service->user->name ?? 'Customer tidak ditemukan',
-                'teknisi' => $tracking->scheduleService->teknisi->name ?? 'Teknisi tidak ditemukan',
-            ]);
-        } else {
+        // Jika data kosong, kembalikan respons 404
+        if ($tracking->isEmpty()) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
+
+        // Ubah koleksi menjadi array JSON
+        $trackingData = $tracking->map(function ($item) {
+            return [
+                'latitude' => $item->latitude,
+                'longitude' => $item->longitude,
+                'customer' => $item->service->user->name ?? 'Customer tidak ditemukan',
+                'teknisi' => $item->scheduleService->teknisi->name ?? 'Teknisi tidak ditemukan',
+            ];
+        });
+
+        return response()->json($trackingData);
     }
 }
