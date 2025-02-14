@@ -36,7 +36,7 @@ class TrackingServiceController extends Controller
     }
     public function getTrackingById($id)
     {
-        $tracking = TrackingService::with(['service.user', 'scheduleService.teknisi'])->where('id_service', $id)->latest()->first();
+        $tracking = TrackingService::with(['service.user', 'scheduleService.teknisi'])->where('id_service', $id)->get();
 
         if ($tracking) {
             return response()->json([

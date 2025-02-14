@@ -64,7 +64,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Pastikan ada elemen #map
             if (!document.getElementById('map')) {
                 console.error("Elemen #map tidak ditemukan.");
                 return;
@@ -75,31 +74,48 @@
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
-            var marker;
+            var markers = []; // Array untuk menyimpan marker agar bisa dihapus saat update
 
             function updateLocation() {
                 $.ajax({
-                    url: "/route-tracking/{{ $service[0]->id_service ?? 0 }}", // Gunakan Blade untuk menghindari error jika kosong
+                    url: "/route-tracking/{{ $service[0]->id_service ?? 0 }}", // Pastikan URL benar
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        var lat = parseFloat(data.latitude);
-                        var lng = parseFloat(data.longitude);
-                        var teknisi = data.teknisi;
-                        var customer = data.customer;
-                        var popupContent = "Petugas Teknisi : " + teknisi + "<br> Menuju Customer : " +
-                            customer;
-                        if (!isNaN(lat) && !isNaN(lng)) {
-                            if (marker) {
-                                marker.setLatLng([lat, lng]).bindPopup(popupContent).openPopup();
-                            } else {
-                                marker = L.marker([lat, lng]).addTo(map)
-                                    .bindPopup("Lokasi Terakhir Teknisi").openPopup();
-                            }
+                        // Hapus semua marker sebelumnya
+                        markers.forEach(marker => map.removeLayer(marker));
+                        markers = [];
 
-                            map.setView([lat, lng], 14);
-                        } else {
-                            console.error("Data lokasi tidak valid:", data);
+                        // Pastikan data berupa array
+                        if (!Array.isArray(data) || data.length === 0) {
+                            console.error("Data lokasi tidak valid atau kosong.");
+                            return;
+                        }
+
+                        var bounds = L
+                    .latLngBounds(); // Untuk mengatur view agar menyesuaikan dengan data
+
+                        // Looping semua titik lokasi dan tambahkan marker
+                        data.forEach(function(item) {
+                            var lat = parseFloat(item.latitude);
+                            var lng = parseFloat(item.longitude);
+                            var teknisi = item.teknisi || "Teknisi tidak ditemukan";
+                            var customer = item.customer || "Customer tidak ditemukan";
+
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                var popupContent = "Teknisi: " + teknisi +
+                                    "<br> Menuju Customer: " + customer;
+                                var marker = L.marker([lat, lng]).addTo(map)
+                                    .bindPopup(popupContent).openPopup();
+
+                                markers.push(marker);
+                                bounds.extend([lat, lng]);
+                            }
+                        });
+
+                        // Jika ada data, sesuaikan tampilan peta dengan semua marker
+                        if (markers.length > 0) {
+                            map.fitBounds(bounds);
                         }
                     },
                     error: function(xhr, status, error) {
