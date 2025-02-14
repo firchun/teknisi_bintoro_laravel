@@ -4,5 +4,8 @@
         <button class="btn btn-sm btn-success" onclick="jadwalCustomer({{ $customer->id }})">Terima</button>
     @else
         <button class="btn btn-sm btn-warning" onclick="jadwalCustomer({{ $customer->id }})">Jadwal</button>
+        @if (Auth::user()->role != 'Teknisi')
+            <a href="{{ route('tracking', $customer->id) }}" class="btn btn-sm btn-success">Tracking</a>
+        @endif
     @endif
 </div>

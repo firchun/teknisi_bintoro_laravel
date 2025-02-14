@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FinishedServiceController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleServiceController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ToolServiceController;
 use App\Http\Controllers\TrackingServiceController;
 use App\Http\Controllers\UserController;
 use App\Models\FinishedService;
@@ -29,6 +31,10 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 Route::middleware(['auth:web', 'verified'])->group(function () {
+    //grafik
+    Route::get('/service-chart', [HomeController::class, 'serviceChart']);
+    Route::get('/service-status-chart', [HomeController::class, 'serviceStatusChart']);
+    //home managemen
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/akun-user', [App\Http\Controllers\HomeController::class, 'akunUser'])->name('akun-user');
     Route::get('/pengajuan-service', [App\Http\Controllers\HomeController::class, 'pengajuanService'])->name('pengajuan-service');
@@ -38,10 +44,11 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     //service managemen
-    Route::get('/tracking', [TrackingServiceController::class, 'index'])->name('tracking');
+    Route::get('/tracking/{id}', [TrackingServiceController::class, 'index'])->name('tracking');
     Route::post('/tracking/store', [TrackingServiceController::class, 'store'])->name('tracking.store');
     Route::get('/tracking/edit/{di}', [TrackingServiceController::class, 'edit'])->name('tracking.edit');
     Route::get('/tracking-datatable', [TrackingServiceController::class, 'getTrackingDataTable']);
+    Route::get('/route-tracking/{id}', [TrackingServiceController::class, 'getTrackingById']);
     //service managemen
     Route::get('/service', [ServiceController::class, 'index'])->name('service');
     Route::post('/service/store', [ServiceController::class, 'store'])->name('service.store');
@@ -60,6 +67,8 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     //report managemen
     Route::get('/report/finished', [ReportController::class, 'reportFinished'])->name('report.finished');
     Route::get('/report/sparepart', [ReportController::class, 'reportSparepart'])->name('report.sparepart');
+    //tool service
+    Route::get('/tool-service-datatable', [ToolServiceController::class, 'getToolServiceDataTable']);
     //calendar managemen
     Route::get('/calendar', [ScheduleServiceController::class, 'calendar'])->name('calendar.index');
     Route::get('/calendar/events', [ScheduleServiceController::class, 'getEvents'])->name('calendar.events');

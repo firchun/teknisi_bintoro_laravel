@@ -16,4 +16,8 @@ class ToolService extends Model
     {
         return $this->belongsTo(Service::class, 'id_service');
     }
+    public function scheduleService()
+    {
+        return $this->hasOne(ScheduleService::class, 'id_service', 'id_service');
+    }
 }

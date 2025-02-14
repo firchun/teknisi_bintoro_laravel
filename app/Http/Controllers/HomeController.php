@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\ScheduleService;
+use App\Models\Service;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +34,14 @@ class HomeController extends Controller
         }
         $data = [
             'title' => 'Dashboard',
-            'users' => User::count(),
+            'users' => User::where('role', 'User')->count(),
+            'teknisi' => User::where('role', 'Teknisi')->count(),
+            'kepala_teknisi' => User::where('role', 'K_teknisi')->count(),
+            'service_pending' => Service::where('diterima', 0)->count(),
+            'service_ditolak' => Service::where('diterima', '>', 1)->count(),
+            'service_diterima' => Service::where('diterima', 1)->count(),
+            'service_selesai' => Service::where('diterima', 1)->count(),
+            'service_teknisi' => ScheduleService::where('id_teknisi', Auth::id())->count(),
         ];
         return view('admin.dashboard', $data);
     }
@@ -55,5 +65,24 @@ class HomeController extends Controller
             'title' => 'Riwayat Service',
         ];
         return view('pages.riwayat', $data);
+    }
+    public function serviceChart()
+    {
+        $services = Service::where('created_at', '>=', Carbon::now()->subMonth())
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        return response()->json($services);
+    }
+    public function serviceStatusChart()
+    {
+        $data = [
+            'diterima' => Service::where('diterima', 1)->count(),
+            'selesai' => Service::where('selesai', 1)->count(),
+        ];
+
+        return response()->json($data);
     }
 }

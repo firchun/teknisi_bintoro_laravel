@@ -17,7 +17,13 @@ class FinishedServiceController extends Controller
             ->addColumn('laporan', function ($customer) {
                 return '<a href="" target="__blank" class="btn btn-danger"><i class="bx bxs-file-pdf"></i> Download</a>';
             })
-            ->rawColumns(['laporan'])
+            ->addColumn('tanggal_pengajuan', function ($service) {
+                return $service->service->created_at->format('d F Y') ?? '-';
+            })
+            ->addColumn('tanggal_selesai', function ($service) {
+                return $service->created_at->format('d F Y') ?? '-';
+            })
+            ->rawColumns(['laporan', 'tanggal_pengajuan', 'tanggal_selesai'])
             ->make(true);
     }
 }

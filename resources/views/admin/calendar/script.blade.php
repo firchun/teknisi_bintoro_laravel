@@ -116,14 +116,14 @@
                             // alert(response);
                             document.getElementById('start-pengerjaan').style.display = response ?
                                 'none' : 'block';
-                            // document.getElementById('alat-pengerjaan').style.display = response ?
-                            //     'block' : 'none';
-                            if (response.finish === 0) {
-                                $('#badgeStatus').text('proses service');
-                            } else {
-                                $('#badgeStatus').text('selesai');
+                            document.getElementById('alat-pengerjaan').style.display = response ?
+                                'block' : 'none';
+                            // if (response.finish === 0) {
+                            //     $('#badgeStatus').text('proses service');
+                            // } else {
+                            //     $('#badgeStatus').text('selesai');
 
-                            }
+                            // }
                             $('#alat-pengerjaan').on('click', function(currentEventId) {
                                 $('#addAlatModal').modal('show');
                                 $('#idServiceTool').val(response.id_service);

@@ -34,6 +34,17 @@
                 <div data-i18n="Analytics">Kalender</div>
             </a>
         </li>
+        @if (Auth::user()->role == 'K_teknisi')
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text">Pengajuan</span>
+            </li>
+            <li class="menu-item {{ request()->is('service*') ? 'active' : '' }}">
+                <a href="{{ url('/service') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-copy-alt"></i>
+                    <div data-i18n="Analytics">Pengajuan</div>
+                </a>
+            </li>
+        @endif
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Laporan</span>
         </li>
@@ -43,14 +54,20 @@
                 <div data-i18n="Analytics">Service Selesai</div>
             </a>
         </li>
-        @if (Auth::user()->role == 'K_teknisi')
+        <li class="menu-item {{ request()->is('report/sparepart*') ? 'active' : '' }}">
+            <a href="{{ url('/report/sparepart') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-folder"></i>
+                <div data-i18n="Analytics">Sparepart</div>
+            </a>
+        </li>
+        {{-- @if (Auth::user()->role == 'K_teknisi')
             <li class="menu-item {{ request()->is('service*') ? 'active' : '' }}">
                 <a href="{{ url('/service') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-copy-alt"></i>
                     <div data-i18n="Analytics">Pengajuan</div>
                 </a>
             </li>
-        @endif
+        @endif --}}
         @if (Auth::user()->role == 'Admin')
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text">Service</span>
