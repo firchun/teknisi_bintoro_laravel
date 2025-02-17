@@ -109,9 +109,9 @@
             });
 
             function checkArriveStatus() {
-                if (currentEventId) {
+                if (currentIdService) {
                     $.ajax({
-                        url: '/schedule/check-arrive/' + currentEventId,
+                        url: '/schedule/check-arrive/' + currentIdService,
                         type: 'GET',
                         success: function(response) {
                             if (response.finish == 1) {
