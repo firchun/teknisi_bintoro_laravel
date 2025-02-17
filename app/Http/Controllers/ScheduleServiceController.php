@@ -101,11 +101,18 @@ class ScheduleServiceController extends Controller
     {
         $customer = UpdateArrive::where('id_service', $id)->latest()->first();
         $checkFinish = Service::checkFinish($id);
+
         if (!$customer) {
-            return response()->json(['message' => 'arrive not found', 'finish' => $checkFinish], 404);
+            return response()->json([
+                'message' => 'Arrive not found',
+                'finish' => $checkFinish
+            ], 404);
         }
 
-        return response()->json($customer);
+        return response()->json([
+            'customer' => $customer,
+            'finish' => $checkFinish
+        ], 200);
     }
     public function calendar()
     {
