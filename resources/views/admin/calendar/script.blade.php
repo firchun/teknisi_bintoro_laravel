@@ -118,10 +118,15 @@
                             if (response) {
                                 document.getElementById('start-pengerjaan').style.display = 'none';
                                 document.getElementById('alat-pengerjaan').style.display = 'block';
+                                if (response.finish == 1) {
+                                    document.getElementById('start-pengerjaan').style.display = 'none';
+                                    document.getElementById('alat-pengerjaan').style.display = 'none';
+                                }
                             } else {
                                 document.getElementById('start-pengerjaan').style.display = 'block';
                                 document.getElementById('alat-pengerjaan').style.display = 'none';
                             }
+
 
                             $('#alat-pengerjaan').off('click').on('click', function() {
                                 $('#addAlatModal').modal('show');
