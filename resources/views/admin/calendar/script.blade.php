@@ -56,8 +56,8 @@
             document.getElementById('modal-phone').href = props.phone || '#';
             document.getElementById('modal-rute').href = props.rute || '#';
             document.getElementById('modal-image').src = props.image || '';
-            currentEventId = event.id;
-            currentIdService = props.id_service;
+            currentEventId = event.id ?? props.id;
+            currentIdService = props.id_service ?? event.id_service;
             currentEmail = props.email ?? event.email;
             // console.log(event);
         }
