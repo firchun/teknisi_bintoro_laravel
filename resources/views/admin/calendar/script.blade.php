@@ -32,12 +32,11 @@
         $(document).on('click', '.remove-input', function() {
             $(this).closest('.alat-group').remove();
         });
-        // timer
 
         var currentEventId = null;
         var currentIdService = null;
         var currentEmail = 'firchun025@gmail.com';
-        // kalender
+
         function populateEventModal(event) {
             const props = event.extendedProps || {};
             document.getElementById('modal-title').innerText = event.title || 'Tidak ada data';
@@ -59,11 +58,9 @@
             currentEventId = event.id ?? props.id;
             currentIdService = props.id_service ?? event.id_service;
             currentEmail = props.email ?? event.email;
-            // console.log(event);
+            console.log('Current Event ID:', currentEventId); // Tambahkan log untuk memeriksa nilai currentEventId
         }
 
-
-        // Inisialisasi FullCalendar
         document.addEventListener('DOMContentLoaded', function() {
             const calendarEl = document.getElementById('calendar');
             const eventListEl = document.getElementById('eventList');
@@ -83,8 +80,6 @@
                         keyboard: true
                     });
                     modal.show();
-
-
                 },
                 eventDidMount: function(info) {
                     const props = info.event.extendedProps || {};
@@ -107,7 +102,9 @@
                     eventListEl.appendChild(eventItem);
                 }
             });
+
             $('#eventModal').on('shown.bs.modal', function() {
+                console.log('Modal shown, checking arrive status...');
                 checkArriveStatus();
             });
 
@@ -140,6 +137,7 @@
                     console.error('ID event tidak ditemukan.');
                 }
             }
+
             document.getElementById('start-pengerjaan').addEventListener('click', function() {
                 //post data
                 //kirim email menuju lokasi
@@ -223,7 +221,6 @@
                 var timerDisplay = document.getElementById('timer-display');
                 var progressCircle = document.getElementById('progress-circle');
 
-
                 var totalTime = 120;
                 var elapsedTime = 0;
                 var lastTimerTime = "00:00";
@@ -251,20 +248,17 @@
 
                 var timerInterval = setInterval(updateTimer, 1000);
 
-
                 var closeButton = document.querySelector('#eventModal .btn-close');
                 closeButton.setAttribute('disabled', true);
 
                 var stopButton = document.getElementById('stop-timer');
                 stopButton.disabled = false;
 
-
                 stopButton.addEventListener('click', function() {
                     document.getElementById('timeArrifConfirm').value = lastTimerTime;
 
                     $('#confirmStopModal').modal('show');
                     $('#confirmStopButton').click(function() {
-
                         var formDataConfirm = $('#formConfirmStop').serialize();
                         $.ajax({
                             type: 'POST',
@@ -278,26 +272,22 @@
                                 alert(response.message);
                                 checkArriveStatus();
                                 $('#eventModal').modal('hide');
-
                             },
                             error: function(xhr) {
                                 alert('Terjadi kesalahan: ' + xhr.responseText);
                                 document.getElementById('start-pengerjaan')
-                                    .style.display =
-                                    'block';
+                                    .style.display = 'block';
                             }
                         });
                         clearInterval(timerInterval);
                         timerModal.hide();
-                        closeButton.removeAttribute(
-                            'disabled');
+                        closeButton.removeAttribute('disabled');
                         stopButton.disabled = true;
-                        document.getElementById('start-pengerjaan').disabled =
-                            false;
+                        document.getElementById('start-pengerjaan').disabled = false;
                     });
-
                 });
             });
+
             $('#alatForm').submit(function(e) {
                 e.preventDefault(); // Prevent form default submission
 
@@ -336,6 +326,7 @@
                     },
                 });
             });
+
             checkArriveStatus();
             calendar.render();
         });
