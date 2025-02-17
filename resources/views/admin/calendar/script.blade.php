@@ -59,7 +59,7 @@
             currentIdService = props.id_service ?? event.id_service;
             currentEmail = props.email ?? event.email;
             console.log('Current Event ID:', currentEventId); // Tambahkan log untuk memeriksa nilai currentEventId
-            checkArriveStatus(currentIdService);
+            console.log('Current ID Service:', currentIdService); // Tambahkan log untuk memeriksa nilai currentIdService
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -106,16 +106,16 @@
 
             $('#eventModal').on('shown.bs.modal', function() {
                 console.log('Modal shown, checking arrive status...');
-                checkArriveStatus(currentIdService);
+                checkArriveStatus();
             });
 
-            function checkArriveStatus(currentIdService) {
+            function checkArriveStatus() {
                 if (currentIdService) {
                     $.ajax({
                         url: '/schedule/check-arrive/' + currentIdService,
                         type: 'GET',
                         success: function(response) {
-                            if (response.finish == 1) {
+                            if (response) {
                                 document.getElementById('start-pengerjaan').style.display = 'none';
                                 document.getElementById('alat-pengerjaan').style.display = 'block';
                             } else {
@@ -271,7 +271,7 @@
                             },
                             success: function(response) {
                                 alert(response.message);
-                                checkArriveStatus(currentIdService);
+                                checkArriveStatus();
                                 $('#eventModal').modal('hide');
                             },
                             error: function(xhr) {
@@ -319,7 +319,7 @@
                         alert(response.message); // Show success message
                         $('#alatForm')[0].reset(); // Reset form
                         $('#addAlatModal').modal('hide'); // Hide modal
-                        checkArriveStatus(currentIdService);
+                        checkArriveStatus();
                     },
                     error: function(xhr) {
                         var errors = JSON.parse(xhr.responseText); // Parse error response
@@ -328,7 +328,6 @@
                 });
             });
 
-            checkArriveStatus(currentIdService);
             calendar.render();
         });
     </script>
