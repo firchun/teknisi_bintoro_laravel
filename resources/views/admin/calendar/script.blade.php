@@ -113,31 +113,27 @@
 
             function checkArriveStatus() {
                 if (currentEventId) {
-
                     $.ajax({
                         url: '/schedule/check-arrive/' + currentEventId,
                         type: 'GET',
                         success: function(response) {
-                            // alert(response);
-                            document.getElementById('start-pengerjaan').style.display = response ?
-                                'none' : 'block';
-                            document.getElementById('alat-pengerjaan').style.display = response ?
-                                'block' : 'none';
-                            // if (response.finish === 0) {
-                            //     $('#badgeStatus').text('proses service');
-                            // } else {
-                            //     $('#badgeStatus').text('selesai');
+                            if (response) {
+                                document.getElementById('start-pengerjaan').style.display = 'none';
+                                document.getElementById('alat-pengerjaan').style.display = 'block';
+                            } else {
+                                document.getElementById('start-pengerjaan').style.display = 'block';
+                                document.getElementById('alat-pengerjaan').style.display = 'none';
+                            }
 
-                            // }
-                            $('#alat-pengerjaan').on('click', function(currentEventId) {
+                            $('#alat-pengerjaan').off('click').on('click', function() {
                                 $('#addAlatModal').modal('show');
                                 $('#idServiceTool').val(response.id_service);
                             });
                         },
                         error: function(xhr, status, error) {
-                            console.error('Error:', xhr.responseText || error);
-                            document.getElementById('start-pengerjaan').style.display =
-                                'block';
+                            console.error('Error check arrive:', xhr.responseText || error);
+                            document.getElementById('start-pengerjaan').style.display = 'block';
+                            document.getElementById('alat-pengerjaan').style.display = 'none';
                         }
                     });
                 } else {
