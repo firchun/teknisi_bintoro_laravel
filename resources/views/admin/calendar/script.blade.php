@@ -59,6 +59,7 @@
             currentIdService = props.id_service ?? event.id_service;
             currentEmail = props.email ?? event.email;
             console.log('Current Event ID:', currentEventId); // Tambahkan log untuk memeriksa nilai currentEventId
+            checkArriveStatus(currentIdService);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -105,10 +106,10 @@
 
             $('#eventModal').on('shown.bs.modal', function() {
                 console.log('Modal shown, checking arrive status...');
-                checkArriveStatus();
+                checkArriveStatus(currentIdService);
             });
 
-            function checkArriveStatus() {
+            function checkArriveStatus(currentIdService) {
                 if (currentIdService) {
                     $.ajax({
                         url: '/schedule/check-arrive/' + currentIdService,
@@ -270,7 +271,7 @@
                             },
                             success: function(response) {
                                 alert(response.message);
-                                checkArriveStatus();
+                                checkArriveStatus(currentIdService);
                                 $('#eventModal').modal('hide');
                             },
                             error: function(xhr) {
@@ -318,7 +319,7 @@
                         alert(response.message); // Show success message
                         $('#alatForm')[0].reset(); // Reset form
                         $('#addAlatModal').modal('hide'); // Hide modal
-                        checkArriveStatus();
+                        checkArriveStatus(currentIdService);
                     },
                     error: function(xhr) {
                         var errors = JSON.parse(xhr.responseText); // Parse error response
@@ -327,7 +328,7 @@
                 });
             });
 
-            checkArriveStatus();
+            checkArriveStatus(currentIdService);
             calendar.render();
         });
     </script>
