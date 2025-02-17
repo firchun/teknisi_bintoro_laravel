@@ -1,6 +1,6 @@
 @extends('layouts.backend.admin')
 @push('css')
-    !-- FullCalendar CSS -->
+    <!-- FullCalendar CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
 
     <!-- FullCalendar JS -->

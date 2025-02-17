@@ -117,7 +117,7 @@
                         url: '/schedule/check-arrive/' + currentEventId,
                         type: 'GET',
                         success: function(response) {
-                            if (response) {
+                            if (response.finish == 1) {
                                 document.getElementById('start-pengerjaan').style.display = 'none';
                                 document.getElementById('alat-pengerjaan').style.display = 'block';
                             } else {
