@@ -196,6 +196,17 @@
                         alert(response.message);
                         $('#datatable-customers').DataTable().ajax.reload();
                         $('#jadwal').modal('hide');
+                        // Kirim email setelah jadwal berhasil disimpan
+                        $.ajax({
+                            type: 'GET',
+                            url: `/kirim-notifikasi/${encodeURIComponent('pengajuan_diterima')}/${encodeURIComponent(response.email)}`,
+                            success: function(emailResponse) {
+                                alert(emailResponse.success);
+                            },
+                            error: function(xhr) {
+                                alert('Gagal mengirim email: ' + xhr.responseText);
+                            }
+                        });
                     },
                     error: function(xhr) {
                         alert('Terjadi kesalahan: ' + xhr.responseText);

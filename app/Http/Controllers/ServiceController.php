@@ -128,4 +128,10 @@ class ServiceController extends Controller
             ], 500);
         }
     }
+    public function  destroy($id)
+    {
+        $service = Service::find($id);
+        $service->delete();
+        return back()->with(['success' => 'Service berhasil di batalkan']);
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FinishedServiceController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleServiceController;
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('pages.index');
 });
-
+Route::get('/kirim-notifikasi/{type}/{email}', [NotifikasiController::class, 'kirimNotifikasi']);
 Auth::routes(['verify' => true]);
 Route::middleware(['auth:web', 'verified'])->group(function () {
     //grafik
@@ -54,6 +55,7 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::post('/service/store', [ServiceController::class, 'store'])->name('service.store');
     Route::post('/service/storeTool', [ServiceController::class, 'storeTool'])->name('service.storeTool');
     Route::get('/service/edit/{di}', [ServiceController::class, 'edit'])->name('service.edit');
+    Route::delete('/service/delete/{di}', [ServiceController::class, 'destroy'])->name('service.delete');
     Route::get('/service-datatable', [ServiceController::class, 'getServiceDataTable']);
     Route::get('/finished-service-datatable', [FinishedServiceController::class, 'getFinishedServiceDataTable']);
     //schedule managemen

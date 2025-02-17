@@ -37,13 +37,46 @@
                         </thead>
                         <tbody>
                             @foreach (App\Models\Service::where('id_user', Auth::id())->get() as $item)
+                                @php
+                                    $jadwal = App\Models\ScheduleService::where('id_service', $item->id)->first();
+                                    \Carbon\Carbon::setLocale('id');
+
+                                @endphp
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->alamat }}</td>
-                                    <td>{{ $item->keterangan }}</td>
+                                    <td>{{ $item->keterangan }}<br>
+                                        @if ($jadwal)
+                                            <small>Estimasi biaya :
+                                                <span class="text-danger font-weight-bold">
+                                                    Rp {{ number_format($jadwal->estimasi_biaya) }}</span></small>
+                                        @endif
+                                    </td>
                                     <td>{{ $item->diterima == 1 ? 'Diterima' : 'Menunggu Persetujuan' }}</td>
-                                    <td></td>
-                                    <td><a href="#" class="btn btn-sm btn-danger">Batalkan</a></td>
+                                    <td>
+                                        @if ($jadwal)
+                                            <strong>{{ \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('l, d - F - Y') }}</strong><br>
+                                            <small class="badge badge-secondary">Jam:
+                                                {{ \Carbon\Carbon::parse($jadwal->waktu)->format('H:i') }}</small>
+                                        @else
+                                            <small class="text-mutted">Menunggu diterima</small>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->diterima == 0)
+                                            <form action="{{ route('service.delete', $item->id) }}" method="POST"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Apakah Anda yakin ingin membatalkan?');">
+                                                    Batalkan
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="badge badge-success">Diterima</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

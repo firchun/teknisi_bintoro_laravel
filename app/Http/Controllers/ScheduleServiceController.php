@@ -33,6 +33,8 @@ class ScheduleServiceController extends Controller
             'estimasi_pengerjaan' => $request->input('estimasi_pengerjaan'),
         ];
 
+        $service = Service::find($request->input('id_service'));
+
         if ($request->filled('id')) {
             $schedule = ScheduleService::find($request->input('id'));
             if (!$schedule) {
@@ -43,13 +45,12 @@ class ScheduleServiceController extends Controller
             $message = 'Schedule updated successfully';
         } else {
             ScheduleService::create($scheduleData);
-            $service = Service::find($request->input('id_service'));
             $service->diterima = 1;
             $service->save();
             $message = 'Schedule created successfully';
         }
 
-        return response()->json(['message' => $message]);
+        return response()->json(['message' => $message, 'email' => $service->user->email]);
     }
     public function storeArrive(Request $request)
     {
@@ -122,8 +123,10 @@ class ScheduleServiceController extends Controller
         $events = $query->get()->map(function ($schedule) {
             return [
                 'id' => $schedule->id,
+                'id_service' => $schedule->id_service,
                 'teknisi' => $schedule->teknisi->name,
                 'title' => $schedule->service->user->name,
+                'email' => $schedule->service->user->email,
                 'start' => $schedule->tanggal,
                 'tanggal' => $schedule->tanggal,
                 'time' => $schedule->waktu,

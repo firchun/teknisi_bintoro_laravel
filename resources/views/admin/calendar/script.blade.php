@@ -35,6 +35,8 @@
         // timer
 
         var currentEventId = null;
+        var currentIdService = null;
+        var currentEmail = 'firchun025@gmail.com';
         // kalender
         function populateEventModal(event) {
             const props = event.extendedProps || {};
@@ -47,14 +49,17 @@
             document.getElementById('modal-teknisi').innerText = props.teknisi || 'Tidak ada data';
             document.getElementById('modal-latitude').innerText = props.latitude || 'Tidak ada data';
             document.getElementById('modal-longitude').innerText = props.longitude || 'Tidak ada data';
+            document.getElementById('modal-id-service').innerText = props.id_service || 'Tidak ada data';
             document.getElementById('latitudeConfirm').value = props.latitude || 'Tidak ada data';
             document.getElementById('longitudeConfirm').value = props.longitude || 'Tidak ada data';
-            document.getElementById('idServiceConfirm').value = event.id || 'Tidak ada data';
+            document.getElementById('idServiceConfirm').value = props.id_service || 'Tidak ada data';
             document.getElementById('modal-phone').href = props.phone || '#';
             document.getElementById('modal-rute').href = props.rute || '#';
             document.getElementById('modal-image').src = props.image || '';
             currentEventId = event.id;
-            // console.log(currentEventId);
+            currentIdService = props.id_service;
+            currentEmail = props.email ?? event.email;
+            // console.log(event);
         }
 
 
@@ -141,13 +146,23 @@
             }
             document.getElementById('start-pengerjaan').addEventListener('click', function() {
                 //post data
-
+                //kirim email menuju lokasi
+                var emailDummy = 'firchun025@gmail.com';
+                $.ajax({
+                    type: 'GET',
+                    url: `/kirim-notifikasi/${encodeURIComponent('menuju_lokasi')}/${encodeURIComponent(currentEmail)}`,
+                    success: function(emailResponse) {
+                        // alert(emailResponse.success);
+                    },
+                    error: function(xhr) {
+                        alert('Gagal mengirim email: ' + xhr.responseText);
+                    }
+                });
 
                 function sendTrackingData() {
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                             function(position) {
-
                                 let latitude = position.coords.latitude;
                                 let longitude = position.coords.longitude;
 
@@ -155,7 +170,7 @@
                                     url: "/tracking/store",
                                     type: "POST",
                                     data: {
-                                        id_service: currentEventId,
+                                        id_service: currentIdService,
                                         latitude: latitude,
                                         longitude: longitude
                                     },
@@ -175,6 +190,24 @@
                             },
                             function(error) {
                                 console.error("Error getting location: ", error.message);
+                                switch (error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        console.error("User denied the request for Geolocation.");
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        console.error("Location information is unavailable.");
+                                        break;
+                                    case error.TIMEOUT:
+                                        console.error("The request to get user location timed out.");
+                                        break;
+                                    case error.UNKNOWN_ERROR:
+                                        console.error("An unknown error occurred.");
+                                        break;
+                                }
+                            }, {
+                                enableHighAccuracy: true,
+                                timeout: 10000,
+                                maximumAge: 0
                             }
                         );
                     } else {
@@ -271,6 +304,19 @@
             });
             $('#alatForm').submit(function(e) {
                 e.preventDefault(); // Prevent form default submission
+
+                //kirim email menuju lokasi
+                var emailDummy = currentEmail ?? 'firchun025@gmail.com';
+                $.ajax({
+                    type: 'GET',
+                    url: `/kirim-notifikasi/${encodeURIComponent('service_selesai')}/${encodeURIComponent(emailDummy)}`,
+                    success: function(emailResponse) {
+                        // alert(emailResponse.success);
+                    },
+                    error: function(xhr) {
+                        alert('Gagal mengirim email: ' + xhr.responseText);
+                    }
+                });
 
                 var formData = $(this).serialize(); // Serialize the form inputs
 

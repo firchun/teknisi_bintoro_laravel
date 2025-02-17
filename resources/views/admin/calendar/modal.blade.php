@@ -18,6 +18,10 @@
                          </td>
                      </tr>
                      <tr>
+                         <td class="bg-primary text-white">Id Service</td>
+                         <td><span id="modal-id-service"></span></td>
+                     </tr>
+                     <tr>
                          <td class="bg-primary text-white">Customer</td>
                          <td><span id="modal-title"></span></td>
                      </tr>
