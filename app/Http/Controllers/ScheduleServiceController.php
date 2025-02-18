@@ -50,7 +50,7 @@ class ScheduleServiceController extends Controller
             $message = 'Schedule created successfully';
         }
 
-        return response()->json(['message' => $message, 'email' => $service->user->email]);
+        return response()->json(['message' => $message, 'email' => $service->user->email, 'id_user' => $service->id_user]);
     }
     public function storeArrive(Request $request)
     {
@@ -130,6 +130,7 @@ class ScheduleServiceController extends Controller
         $events = $query->get()->map(function ($schedule) {
             return [
                 'id' => $schedule->id,
+                'id_user' => $schedule->service->id_user,
                 'id_service' => $schedule->id_service,
                 'teknisi' => $schedule->teknisi->name,
                 'title' => $schedule->service->user->name,

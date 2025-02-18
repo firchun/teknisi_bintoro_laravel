@@ -199,7 +199,7 @@
                         // Kirim email setelah jadwal berhasil disimpan
                         $.ajax({
                             type: 'GET',
-                            url: `/kirim-notifikasi/${encodeURIComponent('pengajuan_diterima')}/${encodeURIComponent(response.email)}`,
+                            url: `/kirim-notifikasi/${encodeURIComponent('pengajuan_diterima')}/${encodeURIComponent(response.email)}/${encodeURIComponent(response.id_user)}`,
                             success: function(emailResponse) {
                                 alert(emailResponse.success);
                             },

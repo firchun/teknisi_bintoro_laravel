@@ -35,6 +35,7 @@
 
         var currentEventId = null;
         var currentIdService = null;
+        var currentIdUser = null;
         var currentEmail = 'firchun025@gmail.com';
 
         function populateEventModal(event) {
@@ -57,7 +58,9 @@
             document.getElementById('modal-image').src = props.image || '';
             currentEventId = event.id ?? props.id;
             currentIdService = props.id_service ?? event.id_service;
+            currentIdUser = props.id_user ?? event.id_user;
             currentEmail = props.email ?? event.email;
+            console.log('Current Event ID:', currentIdUser); // Tambahkan log untuk memeriksa nilai currentEventId
             console.log('Current Event ID:', currentEventId); // Tambahkan log untuk memeriksa nilai currentEventId
             console.log('Current ID Service:', currentIdService); // Tambahkan log untuk memeriksa nilai currentIdService
         }
@@ -118,10 +121,10 @@
                             if (response) {
                                 document.getElementById('start-pengerjaan').style.display = 'none';
                                 document.getElementById('alat-pengerjaan').style.display = 'block';
-                                if (response.finish == 1) {
-                                    document.getElementById('start-pengerjaan').style.display = 'none';
-                                    document.getElementById('alat-pengerjaan').style.display = 'none';
-                                }
+                            } else if (response.finish === 1 && response) {
+                                document.getElementById('start-pengerjaan').style.display = 'none';
+                                document.getElementById('alat-pengerjaan').style.display = 'none';
+
                             } else {
                                 document.getElementById('start-pengerjaan').style.display = 'block';
                                 document.getElementById('alat-pengerjaan').style.display = 'none';
@@ -130,7 +133,7 @@
 
                             $('#alat-pengerjaan').off('click').on('click', function() {
                                 $('#addAlatModal').modal('show');
-                                $('#idServiceTool').val(response.id_service);
+                                $('#idServiceTool').val(currentIdService);
                             });
                         },
                         error: function(xhr, status, error) {
@@ -150,7 +153,7 @@
                 var emailDummy = 'firchun025@gmail.com';
                 $.ajax({
                     type: 'GET',
-                    url: `/kirim-notifikasi/${encodeURIComponent('menuju_lokasi')}/${encodeURIComponent(currentEmail)}`,
+                    url: `/kirim-notifikasi/${encodeURIComponent('menuju_lokasi')}/${encodeURIComponent(currentEmail)}/${encodeURIComponent(currentIdUser)}`,
                     success: function(emailResponse) {
                         // alert(emailResponse.success);
                     },
@@ -301,7 +304,7 @@
                 var emailDummy = currentEmail ?? 'firchun025@gmail.com';
                 $.ajax({
                     type: 'GET',
-                    url: `/kirim-notifikasi/${encodeURIComponent('service_selesai')}/${encodeURIComponent(emailDummy)}`,
+                    url: `/kirim-notifikasi/${encodeURIComponent('service_selesai')}/${encodeURIComponent(emailDummy)}/${encodeURIComponent(currentIdUser)}`,
                     success: function(emailResponse) {
                         // alert(emailResponse.success);
                     },

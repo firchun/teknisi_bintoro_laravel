@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('pages.index');
 });
-Route::get('/kirim-notifikasi/{type}/{email}', [NotifikasiController::class, 'kirimNotifikasi']);
+Route::get('/kirim-notifikasi/{type}/{email}/{id_user}', [NotifikasiController::class, 'kirimNotifikasi']);
 Auth::routes(['verify' => true]);
 Route::middleware(['auth:web', 'verified'])->group(function () {
     //grafik
@@ -37,6 +37,7 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/service-status-chart', [HomeController::class, 'serviceStatusChart']);
     //home managemen
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/notifikasi-user', [App\Http\Controllers\HomeController::class, 'notifikasiUser'])->name('notifikasi-user');
     Route::get('/akun-user', [App\Http\Controllers\HomeController::class, 'akunUser'])->name('akun-user');
     Route::get('/pengajuan-service', [App\Http\Controllers\HomeController::class, 'pengajuanService'])->name('pengajuan-service');
     Route::get('/riwayat-service', [App\Http\Controllers\HomeController::class, 'riwayatService'])->name('riwayat-service');

@@ -24,6 +24,12 @@
                     <a href="{{ route('login') }}" class="btn btn-sm btn-primary ml-lg-4">Masuk</a>
                 @else
                     @if (Auth::user()->role == 'User')
+                        <a href="{{ route('notifikasi-user') }}"
+                            style="display: flex; align-items: center; justify-content: center;"><i class="ti ti-bell"></i>
+                            @if (App\Models\Notifikasi::notRead() > 0)
+                                <span class="badge badge-pill badge-danger">{{ App\Models\Notifikasi::notRead() }}</span>
+                            @endif
+                        </a>
                         <a href="{{ route('akun-user') }}" class="btn btn-sm btn-outline-primary ml-lg-4">Akun</a>
 
                         <a class="btn btn-sm btn-primary ml-lg-4" href="{{ route('logout') }}"

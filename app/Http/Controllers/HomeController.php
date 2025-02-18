@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Notifikasi;
 use App\Models\ScheduleService;
 use App\Models\Service;
 use App\Models\User;
@@ -84,5 +85,17 @@ class HomeController extends Controller
         ];
 
         return response()->json($data);
+    }
+    public function notifikasiUser()
+    {
+        $updateNotifikasi = Notifikasi::where('id_user', Auth::id())->where('dibaca', 0);
+        $updateNotifikasi->update(['dibaca' => 1]);
+
+        $data = [
+            'title' => 'Notifikasi',
+            'notifikasi' => Notifikasi::where('id_user', Auth::id())->get()
+        ];
+
+        return view('pages.notifikasi', $data);
     }
 }
