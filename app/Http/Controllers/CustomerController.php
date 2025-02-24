@@ -17,7 +17,7 @@ class CustomerController extends Controller
     }
     public function getCustomersDataTable()
     {
-        $customers = Customer::select(['id', 'name', 'phone', 'address', 'created_at', 'updated_at'])->orderByDesc('id');
+        $customers = Customer::select(['id', 'name', 'phone', 'address', 'created_at', 'updated_at'])->orderBy('id', 'desc');
 
         return Datatables::of($customers)
             ->addColumn('action', function ($customer) {
