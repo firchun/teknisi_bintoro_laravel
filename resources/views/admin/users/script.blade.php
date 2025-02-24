@@ -6,6 +6,9 @@
                 serverSide: false,
                 responsive: false,
                 ajax: '{{ url('users-datatable', $users) }}',
+                order: [
+                    [0, 'desc']
+                ],
                 columns: [{
                         data: 'id',
                         name: 'id'
