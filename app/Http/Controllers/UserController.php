@@ -56,7 +56,7 @@ class UserController extends Controller
     }
     public function getUsersDataTable($role)
     {
-        $users = User::where('role', $role)->orderByDesc('id');
+        $users = User::where('role', $role)->orderBy('id', 'desc');
 
         return Datatables::of($users)
             ->addColumn('avatar', function ($user) {
