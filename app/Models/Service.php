@@ -22,6 +22,18 @@ class Service extends Model
     {
         return $this->hasMany(FinishedService::class, 'id_service');
     }
+    public function schedule()
+    {
+        return $this->hasOne(ScheduleService::class, 'id_service');
+    }
+    public function finishedService()
+    {
+        return $this->hasOne(FinishedService::class, 'id_service');
+    }
+    public function tool()
+    {
+        return $this->hasMany(ToolService::class, 'id_service');
+    }
     public static function checkFinish($id)
     {
         $checkFinish = FinishedService::where('id_service', $id);

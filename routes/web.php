@@ -70,6 +70,7 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     //report managemen
     Route::get('/report/finished', [ReportController::class, 'reportFinished'])->name('report.finished');
     Route::get('/report/sparepart', [ReportController::class, 'reportSparepart'])->name('report.sparepart');
+    Route::get('/report/pdf-finished/{id}', [ReportController::class, 'pdf_finished'])->name('report.pdf-finished');
     //tool service
     Route::get('/tool-service-datatable', [ToolServiceController::class, 'getToolServiceDataTable']);
     //calendar managemen
