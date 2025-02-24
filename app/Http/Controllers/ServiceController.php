@@ -103,11 +103,17 @@ class ServiceController extends Controller
 
         // Simpan data ke database
         try {
+            if ($request->hasFile('foto_hasil')) {
+                $fotoPath = $request->file('foto_hasil')->store('uploads/foto', 'public');
+            } else {
+                $fotoPath = null;
+            }
             FinishedService::create([
                 'id_service' => $validatedData['id_service'],
                 'jenis_kerusakan' => $validatedData['jenis_kerusakan'],
                 'keterangan' => $validatedData['keterangan'],
                 'waktu_penyelesaian' => $validatedData['waktu_penyelesaian'],
+                'foto_hasil' => $fotoPath,
             ]);
             foreach ($validatedData['alat'] as $index => $alat) {
                 ToolService::create([

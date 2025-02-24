@@ -144,12 +144,12 @@
         </tbody>
     </table>
 
-    <h3>Foto Hasil</h3>
+    {{-- <h3>Foto Hasil</h3>
     @if ($service->foto_hasil)
         <img src="{{ public_path('uploads/foto/' . $service->foto_hasil) }}" width="300">
     @else
         <p>Tidak ada foto hasil</p>
-    @endif
+    @endif --}}
 
 </body>
 
