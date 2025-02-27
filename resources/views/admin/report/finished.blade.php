@@ -60,6 +60,9 @@
                 serverSide: false,
                 responsive: false,
                 ajax: '{{ url('finished-service-datatable') }}',
+                order: [
+                    [0, 'desc']
+                ],
                 columns: [{
                         data: 'id',
                         name: 'id'

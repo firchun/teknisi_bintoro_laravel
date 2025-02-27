@@ -8,6 +8,9 @@
                 serverSide: false,
                 responsive: false,
                 ajax: '{{ url('service-datatable') }}',
+                order: [
+                    [0, 'desc']
+                ],
                 columns: [{
                         data: 'id',
                         name: 'id'

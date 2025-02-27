@@ -74,7 +74,8 @@
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
-            var markers = []; // Array untuk menyimpan marker agar bisa dihapus saat update
+            var markers = []; // Untuk menyimpan marker
+            var polyline = null; // Untuk menyimpan jalur perjalanan
 
             function updateLocation() {
                 $.ajax({
@@ -86,16 +87,21 @@
                         markers.forEach(marker => map.removeLayer(marker));
                         markers = [];
 
-                        // Pastikan data berupa array
+                        // Hapus polyline sebelumnya jika ada
+                        if (polyline) {
+                            map.removeLayer(polyline);
+                        }
+
+                        // Pastikan data valid
                         if (!Array.isArray(data) || data.length === 0) {
                             console.error("Data lokasi tidak valid atau kosong.");
                             return;
                         }
 
-                        var bounds = L
-                    .latLngBounds(); // Untuk mengatur view agar menyesuaikan dengan data
+                        var bounds = L.latLngBounds(); // Untuk menyesuaikan tampilan peta
+                        var coordinates = []; // Menyimpan semua koordinat untuk jalur
 
-                        // Looping semua titik lokasi dan tambahkan marker
+                        // Looping untuk menambahkan marker dan menyusun jalur
                         data.forEach(function(item) {
                             var lat = parseFloat(item.latitude);
                             var lng = parseFloat(item.longitude);
@@ -110,8 +116,17 @@
 
                                 markers.push(marker);
                                 bounds.extend([lat, lng]);
+                                coordinates.push([lat, lng]);
                             }
                         });
+
+                        // Jika ada lebih dari satu titik, buat jalur perjalanan
+                        if (coordinates.length > 1) {
+                            polyline = L.polyline(coordinates, {
+                                color: 'blue',
+                                weight: 4
+                            }).addTo(map);
+                        }
 
                         // Jika ada data, sesuaikan tampilan peta dengan semua marker
                         if (markers.length > 0) {

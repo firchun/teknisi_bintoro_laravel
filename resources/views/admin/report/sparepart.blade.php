@@ -60,6 +60,9 @@
                 serverSide: false,
                 responsive: false,
                 ajax: '{{ url('tool-service-datatable') }}',
+                order: [
+                    [0, 'desc']
+                ],
                 columns: [{
                         data: null,
                         name: 'DT_RowIndex',
