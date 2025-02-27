@@ -75,7 +75,7 @@
             }).addTo(map);
 
             var markers = []; // Untuk menyimpan marker
-            var polyline = null; // Untuk menyimpan jalur perjalanan
+            var routingControl = null; // Untuk menyimpan routing control
 
             function updateLocation() {
                 $.ajax({
@@ -87,9 +87,9 @@
                         markers.forEach(marker => map.removeLayer(marker));
                         markers = [];
 
-                        // Hapus polyline sebelumnya jika ada
-                        if (polyline) {
-                            map.removeLayer(polyline);
+                        // Hapus routing control sebelumnya jika ada
+                        if (routingControl) {
+                            map.removeControl(routingControl);
                         }
 
                         // Pastikan data valid
@@ -98,10 +98,8 @@
                             return;
                         }
 
-                        var bounds = L.latLngBounds(); // Untuk menyesuaikan tampilan peta
-                        var coordinates = []; // Menyimpan semua koordinat untuk jalur
+                        var waypoints = []; // Simpan semua koordinat sebagai waypoint
 
-                        // Looping untuk menambahkan marker dan menyusun jalur
                         data.forEach(function(item) {
                             var lat = parseFloat(item.latitude);
                             var lng = parseFloat(item.longitude);
@@ -109,28 +107,36 @@
                             var customer = item.customer || "Customer tidak ditemukan";
 
                             if (!isNaN(lat) && !isNaN(lng)) {
-                                var popupContent = "Teknisi: " + teknisi +
-                                    "<br> Menuju Customer: " + customer;
+                                var popupContent =
+                                    `Teknisi: ${teknisi}<br> Menuju Customer: ${customer}`;
                                 var marker = L.marker([lat, lng]).addTo(map)
                                     .bindPopup(popupContent).openPopup();
 
                                 markers.push(marker);
-                                bounds.extend([lat, lng]);
-                                coordinates.push([lat, lng]);
+                                waypoints.push(L.latLng(lat, lng));
                             }
                         });
 
-                        // Jika ada lebih dari satu titik, buat jalur perjalanan
-                        if (coordinates.length > 1) {
-                            polyline = L.polyline(coordinates, {
-                                color: 'blue',
-                                weight: 4
+                        // Jika ada lebih dari satu titik, buat rute menggunakan leaflet-routing-machine
+                        if (waypoints.length > 1) {
+                            routingControl = L.Routing.control({
+                                waypoints: waypoints,
+                                routeWhileDragging: true,
+                                createMarker: function() {
+                                    return null;
+                                }, // Hilangkan marker default
+                                lineOptions: {
+                                    styles: [{
+                                        color: 'blue',
+                                        weight: 4
+                                    }]
+                                }
                             }).addTo(map);
                         }
 
-                        // Jika ada data, sesuaikan tampilan peta dengan semua marker
-                        if (markers.length > 0) {
-                            map.fitBounds(bounds);
+                        // Sesuaikan tampilan peta dengan semua titik
+                        if (waypoints.length > 0) {
+                            map.fitBounds(L.latLngBounds(waypoints));
                         }
                     },
                     error: function(xhr, status, error) {
