@@ -50,6 +50,7 @@ class TrackingServiceController extends Controller
             return [
                 'latitude' => $item->latitude,
                 'longitude' => $item->longitude,
+                'created_at' => $item->created_at,
                 'customer' => $item->service->user->name ?? 'Customer tidak ditemukan',
                 'teknisi' => $item->scheduleService->teknisi->name ?? 'Teknisi tidak ditemukan',
             ];

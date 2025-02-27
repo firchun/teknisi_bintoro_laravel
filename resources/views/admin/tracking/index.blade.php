@@ -101,6 +101,9 @@
                             return;
                         }
 
+                        // **Urutkan data berdasarkan created_at (jika API belum melakukannya)**
+                        data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
                         var waypoints = []; // Simpan semua koordinat sebagai waypoint
 
                         data.forEach(function(item) {
