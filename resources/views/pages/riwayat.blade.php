@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (App\Models\Service::where('id_user', Auth::id())->get() as $item)
+                            @foreach (App\Models\Service::where('id_user', Auth::id())->latest('id')->get() as $item)
                                 @php
                                     $jadwal = App\Models\ScheduleService::where('id_service', $item->id)->first();
                                     \Carbon\Carbon::setLocale('id');
