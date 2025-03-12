@@ -75,7 +75,10 @@
                                             </form>
                                         @else
                                             <span class="badge badge-success">Diterima</span>
-                                        @endif
+                                            <br>
+                                            @if ($jadwal)
+                                                <small>{{ $jadwal->teknisi->name }}</small>
+                                            @endif
                                     </td>
                                 </tr>
                             @endforeach
