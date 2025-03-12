@@ -35,6 +35,8 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     //grafik
     Route::get('/service-chart', [HomeController::class, 'serviceChart']);
     Route::get('/service-status-chart', [HomeController::class, 'serviceStatusChart']);
+    //notifikasi
+    Route::get('/notifikasi', [App\Http\Controllers\NotifikasiController::class, 'index'])->name('notifikasi');
     //home managemen
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/notifikasi-user', [App\Http\Controllers\HomeController::class, 'notifikasiUser'])->name('notifikasi-user');

@@ -22,6 +22,18 @@
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             <!-- Place this tag where you want the button to render. -->
             <!-- User -->
+            @php
+                $checkNotifikasi = App\Models\Notifikasi::where('id_user', Auth::id())->where('dibaca', 0)->count();
+                // $checkNotifikasi = 2;
+            @endphp
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link " href="{{ route('notifikasi') }}">
+                    <i class="bx bx-bell {{ $checkNotifikasi > 0 ? 'bx-tada text-danger' : '' }}"></i>
+                    @if ($checkNotifikasi > 0)
+                        <span class="badge bg-danger">{{ $checkNotifikasi }}</span>
+                    @endif
+                </a>
+            </li>
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -66,7 +78,6 @@
                             <span class="align-middle">My Profile</span>
                         </a>
                     </li>
-
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>

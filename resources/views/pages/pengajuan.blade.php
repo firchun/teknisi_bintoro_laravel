@@ -67,6 +67,18 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            var currentIdUser = @json(Auth::user()->id);
+            var currentEmail = @json(Auth::user()->email);
+            $.ajax({
+                type: 'GET',
+                url: `/kirim-notifikasi/${encodeURIComponent('pengajuan_baru')}/${encodeURIComponent(currentEmail)}/${encodeURIComponent(currentIdUser)}`,
+                success: function(response) {
+                    console.log('Email notifikasi terkirim:', response);
+                },
+                error: function(xhr) {
+                    console.error('Gagal mengirim email:', xhr.responseText);
+                }
+            });
             // Default coordinates (fallback in case geolocation fails)
             const defaultLatLng = [-8.510604, 140.4059535];
 

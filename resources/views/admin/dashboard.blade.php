@@ -99,6 +99,13 @@
                 'color' => 'warning',
                 'icon' => 'cog',
             ])
+            @include('admin.dashboard_component.card1', [
+                'count' => $service_selesai,
+                'title' => 'Pengajuan selesai',
+                'subtitle' => 'Total Pengajuan selesai',
+                'color' => 'primary',
+                'icon' => 'cog',
+            ])
         </div>
     @endif
 @endsection

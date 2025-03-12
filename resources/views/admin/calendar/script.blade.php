@@ -60,9 +60,9 @@
             currentIdService = props.id_service ?? event.id_service;
             currentIdUser = props.id_user ?? event.id_user;
             currentEmail = props.email ?? event.email;
-            console.log('Current Event ID:', currentIdUser); // Tambahkan log untuk memeriksa nilai currentEventId
-            console.log('Current Event ID:', currentEventId); // Tambahkan log untuk memeriksa nilai currentEventId
-            console.log('Current ID Service:', currentIdService); // Tambahkan log untuk memeriksa nilai currentIdService
+            console.log('Current Event ID:', currentIdUser);
+            console.log('Current Event ID:', currentEventId);
+            console.log('Current ID Service:', currentIdService);
         }
 
         document.addEventListener('DOMContentLoaded', function() {

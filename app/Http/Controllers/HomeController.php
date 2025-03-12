@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -33,6 +34,18 @@ class HomeController extends Controller
         if (Auth::user()->role == 'User') {
             return redirect()->to('/');
         }
+        if (Auth::user()->role == 'Teknisi') {
+            $service_selesai = Service::where('diterima', 1)
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('schedule_service')
+                        ->whereColumn('schedule_service.id_service', 'service.id')
+                        ->where('schedule_service.id_teknisi', Auth::id());
+                })
+                ->count();
+        } else {
+            $service_selesai = Service::where('diterima', 1)->count();
+        }
         $data = [
             'title' => 'Dashboard',
             'users' => User::where('role', 'User')->count(),
@@ -41,7 +54,7 @@ class HomeController extends Controller
             'service_pending' => Service::where('diterima', 0)->count(),
             'service_ditolak' => Service::where('diterima', '>', 1)->count(),
             'service_diterima' => Service::where('diterima', 1)->count(),
-            'service_selesai' => Service::where('diterima', 1)->count(),
+            'service_selesai' => $service_selesai,
             'service_teknisi' => ScheduleService::where('id_teknisi', Auth::id())->count(),
         ];
         return view('admin.dashboard', $data);
