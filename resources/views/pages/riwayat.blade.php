@@ -79,6 +79,7 @@
                                             @if ($jadwal)
                                                 <small>{{ $jadwal->teknisi->name }}</small>
                                             @endif
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
